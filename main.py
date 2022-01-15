@@ -4,7 +4,7 @@ from telebot import types
 
 with open("keys.json", "r", encoding='utf-8') as read_file:
     key = json.load(read_file)
-
+### Either create the keys.json or just add the api key below
 bot = telebot.TeleBot(key['API_KEY'])
 
 with open("info.json", "r", encoding='utf-8') as read_file:
@@ -39,6 +39,5 @@ def echo_all(message):
         bot.send_message(message.chat.id, infos[message.text], reply_markup=rules_keyboard )
     else:
         bot.send_message(message.chat.id, "Γειά! Είμαι ένα botaki που στέλνει ενημερώσεις ή κάτι τέτοιο.\n\nΤι ενημερώσεις θα ήθελες?", reply_markup=main_keyboard)
-
 
 bot.infinity_polling()
