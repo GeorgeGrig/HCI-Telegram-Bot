@@ -2,7 +2,10 @@ import telebot
 import json
 from telebot import types
 
-bot = telebot.TeleBot('5035546410:AAG4ex1Y5c48AiL8k1aVd66jYFlVCyUqJks')
+with open("keys.json", "r", encoding='utf-8') as read_file:
+    key = json.load(read_file)
+
+bot = telebot.TeleBot(key['API_KEY'])
 
 with open("info.json", "r", encoding='utf-8') as read_file:
     infos = json.load(read_file)
