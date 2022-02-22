@@ -19,8 +19,8 @@ flatten_json = str(list(infos.values()))
 flatten_dicts = dict(ChainMap(*list(infos.values())))
 #Add items to the main keyboard
 main_keyboard = types.ReplyKeyboardMarkup(row_width=2)
-itembtn1 = types.KeyboardButton('Ανακοινώσεις')
-itembtn2 = types.KeyboardButton('Κανονισμοί')
+itembtn1 = types.KeyboardButton('Πρόσφατες Ανακοινώσεις')
+itembtn2 = types.KeyboardButton('Γενικές Πληροφορίες')
 main_keyboard.add(itembtn1, itembtn2)
 
 #Add items to the rules selection keyboard (the one from the infos file)
@@ -32,28 +32,28 @@ for info in list(infos.keys()):
 #Greeting message (when the user sends the /start or /help command) (todo add a different function for /help with some kinda useful info)
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
-	bot.send_message(message.chat.id, "Γειά! Είμαι ένα botaki που στέλνει ενημερώσεις ή κάτι τέτοιο.\nΤι ενημερώσεις θα ήθελες?", reply_markup=main_keyboard)
+	bot.send_message(message.chat.id, "Καλωσορίσατε στην υπηρεσία αυτοματοποιημένης πληροφόρησης του 3ου Γυμνασίου Θεσσαλονίκης! \nΠώς μπορούμε να βοηθήσουμε? Επιλέξτε το είδος της πληροφορίας που αναζητάτε.", reply_markup=main_keyboard)
 
 #This handles every other message
 @bot.message_handler(func=lambda message: True)
 def echo_all(message):
     #Send the first 5 announcements in the chat
-    if message.text == 'Ανακοινώσεις':
-        for announcement in list(announcements.values())[:5]:
+    if message.text == 'Πρόσφατες Ανακοινώσεις':
+        for announcement in list(announcements.values())[:4]:
             bot.send_message(message.chat.id,announcement)
-        bot.send_message(message.chat.id, "Πως αλλιώς μπορώ να βοηθήσω;", reply_markup=main_keyboard)
-    elif message.text == 'Κανονισμοί':
+        bot.send_message(message.chat.id, "Πως αλλιώς μπορούμε να βοηθήσουμε;", reply_markup=main_keyboard)
+    elif message.text == 'Γενικές Πληροφορίες':
         #Show the available rules categories
-        bot.send_message(message.chat.id, "Διάλεξε μία απο τις παρακάτω κατηγορίες κανονισμών", reply_markup=rules_keyboard)
+        bot.send_message(message.chat.id, "Διαλέξτε μία απο τις παρακάτω κατηγορίες πληροφοριών", reply_markup=rules_keyboard)
     #If a message contains an available rule category show the keyboard that includes the available questions in said category
     elif message.text in list(infos.keys()):
         questions_keyboard = types.ReplyKeyboardMarkup(selective=False)
         questions_keyboard.add('Πίσω στα αρχικά')
         for question in infos[message.text]:
             questions_keyboard.add(question)
-        bot.send_message(message.chat.id, 'Διάλεξε μία απο τις παρακάτω ερωτήσεις', reply_markup=questions_keyboard)
+        bot.send_message(message.chat.id, 'Διαλέξτε μία απο τις παρακάτω ερωτήσεις', reply_markup=questions_keyboard)
     elif message.text in flatten_json:
         bot.send_message(message.chat.id, flatten_dicts[message.text], reply_markup=rules_keyboard )
     else:
-        bot.send_message(message.chat.id, "Γειά! Είμαι ένα botaki που στέλνει ενημερώσεις ή κάτι τέτοιο.\n\nΤι ενημερώσεις θα ήθελες?", reply_markup=main_keyboard)
+        bot.send_message(message.chat.id, "Καλωσορίσατε στην υπηρεσία αυτοματοποιημένης πληροφόρησης του 3ου Γυμνασίου Θεσσαλονίκης!\nΠώς μπορούμε να βοηθήσουμε?", reply_markup=main_keyboard)
 bot.infinity_polling()
